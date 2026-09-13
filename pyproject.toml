@@ -1,0 +1,26 @@
+[project]
+name = "universal-viewer"
+version = "0.1.0"
+description = "A modern universal file explorer and viewer."
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "PySide6>=6.8",
+    "opencv-python-headless>=4.12",
+    "numpy>=2.3",
+    "Pillow>=11.3",
+    "tifffile>=2025.6",
+]
+
+[project.scripts]
+universal-viewer = "universal_viewer.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+]
