@@ -9,12 +9,10 @@ import tifffile
 
 
 def load(path: str | Path) -> np.ndarray | None:
-
     try:
         image = tifffile.imread(path)
 
         return image
 
     except Exception:
-
         return None

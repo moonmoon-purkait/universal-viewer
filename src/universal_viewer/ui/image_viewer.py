@@ -5,7 +5,7 @@ Image Viewer Widget.
 from pathlib import Path
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QGraphicsPixmapItem,
     QGraphicsScene,
@@ -13,11 +13,12 @@ from PySide6.QtWidgets import (
 )
 from universal_viewer.loaders.image_loader import ImageLoader
 
+
 class ImageViewer(QGraphicsView):
-    """ Graphics view for displaying and interacting with images. 
-    
-    Supports loading images, zooming, panning, and fitting images to 
-    the available viewing area. 
+    """Graphics view for displaying and interacting with images.
+
+    Supports loading images, zooming, panning, and fitting images to
+    the available viewing area.
     """
 
     def __init__(self) -> None:
@@ -36,22 +37,13 @@ class ImageViewer(QGraphicsView):
 
     def _setup(self) -> None:
         """Configure rendering, panning, and transformation behavior."""
-        self.setRenderHints(
-            self.renderHints()
-        )
+        self.setRenderHints(self.renderHints())
 
-        self.setDragMode(
-            QGraphicsView.ScrollHandDrag
-        )
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
 
-        self.setTransformationAnchor(
-            QGraphicsView.AnchorUnderMouse
-        )
+        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
-        self.setResizeAnchor(
-            QGraphicsView.AnchorUnderMouse
-        )
-    
+        self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
 
     def load_image(
         self,
@@ -62,7 +54,6 @@ class ImageViewer(QGraphicsView):
         image = ImageLoader.load(path)
 
         if image is None:
-
             self._pixmap_item.setPixmap(QPixmap())
 
             return
@@ -71,15 +62,13 @@ class ImageViewer(QGraphicsView):
 
         self._pixmap_item.setPixmap(pixmap)
 
-        self.setSceneRect(
-            self._pixmap_item.boundingRect()
-        )
+        self.setSceneRect(self._pixmap_item.boundingRect())
 
         self.fitInView(
             self._pixmap_item,
             Qt.KeepAspectRatio,
         )
-    
+
     def zoom_in(self) -> None:
         """Increase the current image zoom level."""
         factor = 1.20
@@ -114,14 +103,12 @@ class ImageViewer(QGraphicsView):
         factor = 1.20
 
         if event.angleDelta().y() > 0:
-
             self.scale(
                 factor,
                 factor,
             )
 
         else:
-
             self.scale(
                 1 / factor,
                 1 / factor,
@@ -136,6 +123,4 @@ class ImageViewer(QGraphicsView):
 
         self._pixmap_item = QGraphicsPixmapItem()
 
-        self._scene.addItem(
-            self._pixmap_item
-        )
+        self._scene.addItem(self._pixmap_item)

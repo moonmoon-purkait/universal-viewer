@@ -22,7 +22,6 @@ class ImageLoader:
 
         # grayscale
         if len(image.shape) == 2:
-
             h, w = image.shape
 
             bytes_per_line = w

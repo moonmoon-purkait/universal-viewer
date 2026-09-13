@@ -39,9 +39,7 @@ class FileBrowser(QWidget):
         self._create_layout()
         self._connect_signals()
 
-
     # Model
-
 
     def _setup_model(self) -> None:
         """Configure the filesystem model."""
@@ -53,9 +51,7 @@ class FileBrowser(QWidget):
 
         self._model.setRootPath(root)
 
-
     # Tree
-
 
     def _setup_tree(self) -> None:
         """Configure the file tree."""
@@ -64,13 +60,9 @@ class FileBrowser(QWidget):
 
         self._tree.setModel(self._model)
 
-        self._tree.setRootIndex(
-            self._model.index(root)
-        )
+        self._tree.setRootIndex(self._model.index(root))
 
-        
         # General appearance
-        
 
         self._tree.setAnimated(True)
 
@@ -84,21 +76,13 @@ class FileBrowser(QWidget):
 
         self._tree.setWordWrap(False)
 
-        
         # Selection
-        
 
-        self._tree.setSelectionMode(
-            QTreeView.ExtendedSelection
-        )
+        self._tree.setSelectionMode(QTreeView.ExtendedSelection)
 
-        self._tree.setSelectionBehavior(
-            QTreeView.SelectRows
-        )
+        self._tree.setSelectionBehavior(QTreeView.SelectRows)
 
-        
         # Header
-        
 
         header = self._tree.header()
 
@@ -128,9 +112,7 @@ class FileBrowser(QWidget):
             QHeaderView.Fixed,
         )
 
-        
         # Column widths
-        
 
         header.resizeSection(
             1,
@@ -147,19 +129,13 @@ class FileBrowser(QWidget):
             180,
         )
 
-        
         # Header appearance
-        
 
-        header.setDefaultAlignment(
-            Qt.AlignLeft | Qt.AlignVCenter
-        )
+        header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         header.setMinimumSectionSize(60)
 
-
     # Layout
-
 
     def _create_layout(self) -> None:
         """Create widget layout."""
@@ -175,24 +151,16 @@ class FileBrowser(QWidget):
 
         self._tree.setMinimumWidth(500)
 
-        layout.addWidget(
-            self._tree
-        )
-
+        layout.addWidget(self._tree)
 
     # Signals
-
 
     def _connect_signals(self) -> None:
         """Connect tree signals."""
 
-        self._tree.clicked.connect(
-            self._on_item_clicked
-        )
+        self._tree.clicked.connect(self._on_item_clicked)
 
-        self._tree.selectionModel().currentChanged.connect(
-            self._on_current_changed
-        )
+        self._tree.selectionModel().currentChanged.connect(self._on_current_changed)
 
     def _on_current_changed(
         self,
@@ -204,17 +172,11 @@ class FileBrowser(QWidget):
         if not current.isValid():
             return
 
-        path = self._model.filePath(
-            current
-        )
+        path = self._model.filePath(current)
 
-        self.file_selected.emit(
-            path
-        )
-
+        self.file_selected.emit(path)
 
     # Selection
-
 
     def _on_item_clicked(
         self,
@@ -222,17 +184,11 @@ class FileBrowser(QWidget):
     ) -> None:
         """Handle selected filesystem item."""
 
-        path = self._model.filePath(
-            index
-        )
+        path = self._model.filePath(index)
 
-        self.file_selected.emit(
-            path
-        )
-
+        self.file_selected.emit(path)
 
     # Public API
-
 
     def set_root_path(
         self,
@@ -240,17 +196,11 @@ class FileBrowser(QWidget):
     ) -> None:
         """Change the displayed root directory."""
 
-        path = str(
-            Path(path).expanduser().resolve()
-        )
+        path = str(Path(path).expanduser().resolve())
 
-        self._model.setRootPath(
-            path
-        )
+        self._model.setRootPath(path)
 
-        self._tree.setRootIndex(
-            self._model.index(path)
-        )
+        self._tree.setRootIndex(self._model.index(path))
 
     def refresh(self) -> None:
         """Refresh the currently displayed directory."""
@@ -273,9 +223,7 @@ class FileBrowser(QWidget):
         self._model.setRootPath("")
         self._model.setRootPath(path)
 
-        self._tree.setRootIndex(
-            self._model.index(path)
-        )
+        self._tree.setRootIndex(self._model.index(path))
 
         print("Refresh completed:", path)
 
@@ -287,11 +235,7 @@ class FileBrowser(QWidget):
         if not root_index.isValid():
             return
 
-        current_path = Path(
-            self._model.filePath(
-                root_index
-            )
-        )
+        current_path = Path(self._model.filePath(root_index))
 
         if not current_path.is_dir():
             return
@@ -302,13 +246,9 @@ class FileBrowser(QWidget):
         if parent_path == current_path:
             return
 
-        self.set_root_path(
-            str(parent_path)
-        )
-
+        self.set_root_path(str(parent_path))
 
     # Selection API
-
 
     def selected_path(self) -> str | None:
         """Return the currently selected filesystem path."""
@@ -318,13 +258,9 @@ class FileBrowser(QWidget):
         if not index.isValid():
             return None
 
-        return self._model.filePath(
-            index
-        )
-
+        return self._model.filePath(index)
 
     # Paste
-
 
     def paste_files(self) -> None:
         """
@@ -341,18 +277,14 @@ class FileBrowser(QWidget):
         - x-special/gnome-copied-files
         """
 
-        print(
-            ">>> PASTE ACTION FIRED <<<"
-        )
+        print(">>> PASTE ACTION FIRED <<<")
 
         clipboard = QApplication.clipboard()
 
         mime_data = clipboard.mimeData()
 
         if mime_data is None:
-            print(
-                "Clipboard MIME data is empty."
-            )
+            print("Clipboard MIME data is empty.")
             return
 
         print(
@@ -360,29 +292,21 @@ class FileBrowser(QWidget):
             mime_data.formats(),
         )
 
-        
         # Determine operation
-        
 
         operation = "copy"
 
-        if mime_data.hasFormat(
-            "x-special/gnome-copied-files"
-        ):
+        if mime_data.hasFormat("x-special/gnome-copied-files"):
             try:
                 gnome_data = bytes(
-                    mime_data.data(
-                        "x-special/gnome-copied-files"
-                    )
+                    mime_data.data("x-special/gnome-copied-files")
                 ).decode(
                     "utf-8",
                     errors="replace",
                 )
 
                 lines = [
-                    line.strip()
-                    for line in gnome_data.splitlines()
-                    if line.strip()
+                    line.strip() for line in gnome_data.splitlines() if line.strip()
                 ]
 
                 if lines:
@@ -405,9 +329,7 @@ class FileBrowser(QWidget):
         }:
             operation = "copy"
 
-        
         # Get clipboard URLs
-        
 
         urls = []
 
@@ -415,21 +337,15 @@ class FileBrowser(QWidget):
             urls = mime_data.urls()
 
         if not urls:
-            print(
-                "Clipboard does not contain files."
-            )
+            print("Clipboard does not contain files.")
             return
 
-        
         # Determine destination
-        
 
         destination = self._paste_destination()
 
         if destination is None:
-            print(
-                "Could not determine paste destination."
-            )
+            print("Could not determine paste destination.")
             return
 
         print(
@@ -437,16 +353,12 @@ class FileBrowser(QWidget):
             destination,
         )
 
-        
         # Process files
-        
 
         processed_count = 0
 
         for url in urls:
-
             if not url.isLocalFile():
-
                 print(
                     "Skipping non-local URL:",
                     url,
@@ -454,9 +366,7 @@ class FileBrowser(QWidget):
 
                 continue
 
-            source = Path(
-                url.toLocalFile()
-            )
+            source = Path(url.toLocalFile())
 
             print(
                 "Clipboard source:",
@@ -464,7 +374,6 @@ class FileBrowser(QWidget):
             )
 
             if not source.exists():
-
                 print(
                     "Source does not exist:",
                     source,
@@ -472,35 +381,20 @@ class FileBrowser(QWidget):
 
                 continue
 
-            target = (
-                destination
-                / source.name
-            )
+            target = destination / source.name
 
-            
             # Prevent moving a directory into itself.
-            
 
             try:
+                source_resolved = source.resolve()
 
-                source_resolved = (
-                    source.resolve()
-                )
-
-                destination_resolved = (
-                    destination.resolve()
-                )
+                destination_resolved = destination.resolve()
 
                 if source.is_dir():
-
                     if (
-                        destination_resolved
-                        == source_resolved
-                        or destination_resolved.is_relative_to(
-                            source_resolved
-                        )
+                        destination_resolved == source_resolved
+                        or destination_resolved.is_relative_to(source_resolved)
                     ):
-
                         print(
                             "Cannot paste a folder inside itself:",
                             source,
@@ -509,163 +403,96 @@ class FileBrowser(QWidget):
                         continue
 
             except OSError:
-
                 pass
 
-            
             # Cut into the same directory
-            
 
             if operation == "cut":
-
                 try:
-
-                    if (
-                        source.resolve()
-                        == target.resolve()
-                    ):
-
-                        print(
-                            "Cut source and target are identical."
-                        )
+                    if source.resolve() == target.resolve():
+                        print("Cut source and target are identical.")
 
                         processed_count += 1
 
                         continue
 
                 except OSError:
-
                     pass
 
-            
             # Avoid overwriting existing items.
-            
 
-            target = self._unique_target(
-                target
-            )
+            target = self._unique_target(target)
 
-            
             # COPY
-            
 
             if operation == "copy":
-
                 try:
-
                     if source.is_dir():
-
                         shutil.copytree(
                             source,
                             target,
                         )
 
                     else:
-
                         shutil.copy2(
                             source,
                             target,
                         )
 
-                    print(
-                        "COPY SUCCESS:"
-                    )
+                    print("COPY SUCCESS:")
 
-                    print(
-                        f"  From: {source}"
-                    )
+                    print(f"  From: {source}")
 
-                    print(
-                        f"  To:   {target}"
-                    )
+                    print(f"  To:   {target}")
 
                     processed_count += 1
 
                 except Exception as exc:
+                    print("COPY FAILED:")
 
-                    print(
-                        "COPY FAILED:"
-                    )
+                    print(f"  From: {source}")
 
-                    print(
-                        f"  From: {source}"
-                    )
+                    print(f"  To:   {target}")
 
-                    print(
-                        f"  To:   {target}"
-                    )
+                    print(f"  Error: {exc}")
 
-                    print(
-                        f"  Error: {exc}"
-                    )
-
-            
             # CUT / MOVE
-            
 
             elif operation == "cut":
-
                 try:
-
                     shutil.move(
                         source,
                         target,
                     )
 
-                    print(
-                        "MOVE SUCCESS:"
-                    )
+                    print("MOVE SUCCESS:")
 
-                    print(
-                        f"  From: {source}"
-                    )
+                    print(f"  From: {source}")
 
-                    print(
-                        f"  To:   {target}"
-                    )
+                    print(f"  To:   {target}")
 
                     processed_count += 1
 
                 except Exception as exc:
+                    print("MOVE FAILED:")
 
-                    print(
-                        "MOVE FAILED:"
-                    )
+                    print(f"  From: {source}")
 
-                    print(
-                        f"  From: {source}"
-                    )
+                    print(f"  To:   {target}")
 
-                    print(
-                        f"  To:   {target}"
-                    )
+                    print(f"  Error: {exc}")
 
-                    print(
-                        f"  Error: {exc}"
-                    )
-
-        
         # Refresh browser
-        
 
         if processed_count > 0:
-
             self.refresh()
 
-            print(
-                f"{operation.capitalize()} processed "
-                f"{processed_count} item(s)."
-            )
+            print(f"{operation.capitalize()} processed {processed_count} item(s).")
 
         else:
-
-            print(
-                "Nothing was pasted."
-            )
-
+            print("Nothing was pasted.")
 
     # Paste destination
-
 
     def _paste_destination(
         self,
@@ -683,57 +510,34 @@ class FileBrowser(QWidget):
             paste into current root directory.
         """
 
-        current_index = (
-            self._tree.currentIndex()
-        )
+        current_index = self._tree.currentIndex()
 
-        
         # Selected item
-        
 
         if current_index.isValid():
-
-            selected_path = Path(
-                self._model.filePath(
-                    current_index
-                )
-            )
+            selected_path = Path(self._model.filePath(current_index))
 
             if selected_path.is_dir():
-
                 return selected_path
 
             if selected_path.is_file():
-
                 return selected_path.parent
 
-        
         # No selected item
-        
 
-        root_index = (
-            self._tree.rootIndex()
-        )
+        root_index = self._tree.rootIndex()
 
         if not root_index.isValid():
-
             return None
 
-        root_path = Path(
-            self._model.filePath(
-                root_index
-            )
-        )
+        root_path = Path(self._model.filePath(root_index))
 
         if root_path.is_dir():
-
             return root_path
 
         return None
 
-
     # Unique target
-
 
     def _unique_target(
         self,
@@ -750,7 +554,6 @@ class FileBrowser(QWidget):
         """
 
         if not target.exists():
-
             return target
 
         parent = target.parent
@@ -762,21 +565,14 @@ class FileBrowser(QWidget):
         counter = 1
 
         while True:
-
-            candidate = (
-                parent
-                / f"{stem} ({counter}){suffix}"
-            )
+            candidate = parent / f"{stem} ({counter}){suffix}"
 
             if not candidate.exists():
-
                 return candidate
 
             counter += 1
 
-
     # Rename
-
 
     def rename_selected(self) -> None:
         """Rename the currently selected file or folder."""
@@ -790,9 +586,7 @@ class FileBrowser(QWidget):
         # currentIndex() may point to Size, Type, or Date Modified.
         index = index.siblingAtColumn(0)
 
-        old_path = Path(
-            self._model.filePath(index)
-        )
+        old_path = Path(self._model.filePath(index))
 
         old_name = old_path.name
 
@@ -838,8 +632,7 @@ class FileBrowser(QWidget):
             QMessageBox.warning(
                 self,
                 "Rename Failed",
-                f"An item with this name already exists:\n\n"
-                f"{new_name}",
+                f"An item with this name already exists:\n\n{new_name}",
             )
             return
 
@@ -858,12 +651,9 @@ class FileBrowser(QWidget):
             )
             return
 
-        self.status_message = (
-            f"Renamed: {old_name} → {new_name}"
-        )
+        self.status_message = f"Renamed: {old_name} → {new_name}"
 
     # Delete
-
 
     def delete_selected(self) -> None:
         """Delete the currently selected file or folder."""
@@ -873,16 +663,13 @@ class FileBrowser(QWidget):
         if not index.isValid():
             return
 
-        path = Path(
-            self._model.filePath(index)
-        )
+        path = Path(self._model.filePath(index))
 
         answer = QMessageBox.question(
             self,
             "Delete",
             f"Are you sure you want to delete:\n\n{path.name}?",
-            QMessageBox.StandardButton.Yes
-            | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
             QMessageBox.StandardButton.No,
         )
 
@@ -898,9 +685,7 @@ class FileBrowser(QWidget):
                 f"Could not delete:\n{path}",
             )
 
-
     # Select All
-
 
     def select_all(self) -> None:
         """Select all visible files and folders."""
@@ -910,9 +695,7 @@ class FileBrowser(QWidget):
     def selected_paths(self) -> list[str]:
         """Return all selected filesystem paths."""
 
-        indexes = self._tree.selectionModel().selectedRows(
-            0
-        )
+        indexes = self._tree.selectionModel().selectedRows(0)
 
         paths: list[str] = []
 

@@ -20,9 +20,7 @@ class AppToolBar(QToolBar):
             self,
         )
 
-        
         # Actions
-        
 
         self.open_folder_action = QAction(
             "Open Folder",
@@ -49,32 +47,20 @@ class AppToolBar(QToolBar):
             self,
         )
 
-        
         # Toolbar
-        
 
-        self.addAction(
-            self.open_folder_action
-        )
+        self.addAction(self.open_folder_action)
 
         self.addSeparator()
 
-        self.addAction(
-            self.refresh_action
-        )
+        self.addAction(self.refresh_action)
 
         self.addSeparator()
 
-        self.addAction(
-            self.zoom_in_action
-        )
+        self.addAction(self.zoom_in_action)
 
-        self.addAction(
-            self.zoom_out_action
-        )
+        self.addAction(self.zoom_out_action)
 
         self.addSeparator()
 
-        self.addAction(
-            self.fit_action
-        )
+        self.addAction(self.fit_action)

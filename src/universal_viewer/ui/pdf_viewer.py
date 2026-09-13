@@ -17,13 +17,9 @@ class PdfViewer(QPdfView):
 
         self._document = QPdfDocument(self)
 
-        self.setDocument(
-            self._document
-        )
+        self.setDocument(self._document)
 
-    
     # Public API
-    
 
     def load_pdf(
         self,
@@ -36,18 +32,14 @@ class PdfViewer(QPdfView):
         if not path.is_file():
             return
 
-        self._document.load(
-            str(path)
-        )
+        self._document.load(str(path))
 
     def clear(self) -> None:
         """Clear the current PDF."""
 
         self._document.close()
 
-    
     # Page navigation
-    
 
     def next_page(self) -> None:
         """Show the next PDF page."""
@@ -60,7 +52,6 @@ class PdfViewer(QPdfView):
                 QPointF(0, 0),
             )
 
-
     def previous_page(self) -> None:
         """Show the previous PDF page."""
 
@@ -72,9 +63,7 @@ class PdfViewer(QPdfView):
                 QPointF(0, 0),
             )
 
-    
     # Keyboard
-    
 
     def keyPressEvent(self, event) -> None:
         """Handle PDF page navigation."""
